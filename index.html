@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Bootstrap Forms by sethvargo</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Bootstrap Forms</h1>
+        <h2>Bootstrap Forms makes Twitter's Bootstrap on Rails easy!</h2>
+        <a href="https://github.com/sethvargo/bootstrap_forms" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>Bootstrap Forms</h1>
+
+<p><a href="http://travis-ci.org/sethvargo/bootstrap_forms"><img src="https://secure.travis-ci.org/sethvargo/bootstrap_forms.png?branch=master" alt="Build Status"></a></p>
+
+<p>Bootstrap Forms is a nice Rails generator that makes working with <a href="http://twitter.github.com/bootstrap">Bootstrap (by Twitter)</a> even easier on Rails. </p>
+
+<p>Forms with Bootstrap are crowded with additional layout markup. While it's necessary, you shouldn't have to type it every time you create a form! That's why I created Bootstrap Forms.</p>
+
+<h2>Bootstrap 2.0 Compliant!</h2>
+
+<p>A super special thanks to <a href="https://github.com/vincenzor">vincenzor</a> for updating <code>bootstrap_forms</code> to comply with the new methods and features in Twitter Bootstrap 2.0. </p>
+
+<p>To get these new features, ensure you are using <code>bootstrap_forms ~&gt; 2.0.0</code>.</p>
+
+<h2>Note/Caution/Warning</h2>
+
+<p>There were <strong>major</strong> changes in the release of version <code>0.1.0</code>:</p>
+
+<ol>
+<li>The gem name has officially changed from <code>bootstrap-forms</code> to <code>bootstrap_forms</code> to match gem naming conventions. The old gem still exists on rubygems for legacy applications, however, you should update to the new gem as quickly as possible. It's faster and more stable. The old gem is no longer maintained.</li>
+<li>
+<code>form_for</code> is no longer overridden by default. There were multiple users who were concerned that this behavior was ill advised. Instead, a new form helper, <code>bootstrap_form_for</code> has been created. This is in line with other form building libraries.</li>
+<li>The gem is now a Rails 3 Engine. As such, <strong>Bootstrap Forms will not work in &lt; Rails 3.0</strong>. The engine is automatically mounted when including the gem in your <code>Gemfile</code>.</li>
+</ol><h2>Installation</h2>
+
+<p>Add it to your <code>Gemfile</code>:</p>
+
+<pre><code>gem 'bootstrap_forms'
+</code></pre>
+
+<p>Don't forget to run the <code>bundle</code> command. The gem will add the method <code>bootstrap_form_for</code> for use in your project. This is different from <code>bootstrap_forms &lt; 0.1.0</code>. In previous versions, the default form builders were overridden by default. With backlash from various community members, this is no longer the default.</p>
+
+<p>Be sure to restart your Rails server after installing the gem.</p>
+
+<h2>Why?</h2>
+
+<p>With Bootstrap, you would need the following code for a form:</p>
+
+<div class="highlight">
+<pre><span class="c">/ using HAML</span>
+<span class="p">=</span> <span class="n">form_for</span> <span class="vi">@model</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+  <span class="nc">.clearfix</span>
+    <span class="nt">%label</span> MyLabel
+    <span class="nc">.input</span>
+      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_area</span> <span class="ss">:field</span><span class="p">,</span> <span class="ss">:opts</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="p">}</span>
+</pre>
+</div>
+
+
+<p>Using Bootstrap Forms, this is <strong>much</strong> simpler:</p>
+
+<div class="highlight">
+<pre><span class="c">/ using HAML</span>
+<span class="p">=</span> <span class="n">bootstrap_form_for</span> <span class="vi">@model</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+  <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_area</span> <span class="ss">:field</span><span class="p">,</span> <span class="ss">:opts</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="p">}</span>
+</pre>
+</div>
+
+
+<p>The custom form builder will automatically wrap everything for you. This helps clean up your view layer significantly!</p>
+
+<h2>Additional Form Methods</h2>
+
+<p>Just when you thought you were done... Bootstrap Forms includes additional form helpers that make life <strong>a lot</strong> easier! For example, the markup required for a list of checkboxes is quite cumbersome... well, it used to be.</p>
+
+<h3>collection_check_boxes</h3>
+
+<p><code>collection_check_boxes</code> behaves very similarly to <code>collection_select</code>:</p>
+
+<div class="highlight">
+<pre><span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">collection_check_boxes</span> <span class="ss">:category_ids</span><span class="p">,</span> <span class="no">Category</span><span class="o">.</span><span class="n">all</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="ss">:name</span>
+</pre>
+</div>
+
+
+<h3>collection_radio_buttons</h3>
+
+<p>See description above...</p>
+
+<div class="highlight">
+<pre><span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">collection_radio_buttons</span> <span class="ss">:primary_category_id</span><span class="p">,</span> <span class="no">Category</span><span class="o">.</span><span class="n">all</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="ss">:name</span>
+</pre>
+</div>
+
+
+<h3>radio_buttons</h3>
+
+<div class="highlight">
+<pre><span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">radio_buttons</span> <span class="ss">:published</span><span class="p">,</span> <span class="p">{</span> <span class="s2">"Published"</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="s2">"Unpublished"</span> <span class="o">=&gt;</span> <span class="kp">false</span> <span class="p">}</span>
+</pre>
+</div>
+
+
+<p>Ruby 1.8 doesn't guarantee hashes are ordered. If you care, pass in nested arrays or <code>ActiveSupport::OrderedHash</code>.</p>
+
+<h2>Uneditable Input</h2>
+
+<p>Bootstrap Forms adds another helper method that generates the necessary markup for uneditable inputs:</p>
+
+<div class="highlight">
+<pre><span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">uneditable_input</span> <span class="ss">:name</span>
+</pre>
+</div>
+
+
+<p>yields:</p>
+
+<div class="highlight">
+<pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"clearfix"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">"organization_name"</span><span class="nt">&gt;</span>Organization Name<span class="nt">&lt;/label&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"uneditable-input"</span><span class="nt">&gt;</span>The Variety Hour<span class="nt">&lt;/span&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre>
+</div>
+
+
+<h2>Submit Tag</h2>
+
+<p>Bootstrap Forms also adds a default actions panel when you call <code>f.submit</code>:</p>
+
+<div class="highlight">
+<pre><span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span>
+</pre>
+</div>
+
+
+<p>generates:</p>
+
+<div class="highlight">
+<pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"actions"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"..."</span> <span class="na">class=</span><span class="s">"btn primary"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"..."</span> <span class="na">class=</span><span class="s">"btn"</span><span class="nt">&gt;</span>Cancel<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre>
+</div>
+
+
+<p>You can skip the cancel button by passing the <code>:include_cancel</code> button a <code>false</code> value.</p>
+
+<p>Pretty swell if you ask me.</p>
+
+<h2>Adding More Options</h2>
+
+<p>You can add as many options to any form helper tag. If they are interpreted by Bootstrap Forms, they are interpreted and rendered in the output. If not, they are passed along as values to the final HTML form object.</p>
+
+<h3>Available Options</h3>
+
+<table>
+<tr>
+<th>Name</th>
+    <th>Description</th>
+    <th>Usage</th>
+  </tr>
+<tr>
+<th>help_inline</th>
+    <td>Add inline help text</td>
+    <td>= f.text_field :name, :help_inline =&gt; 'help me!'</td>
+  </tr>
+<tr>
+<th>help_block</th>
+    <td>Add block help text (below)</td>
+    <td>= f.text_field :name, :help_block =&gt; 'help me!'</td>
+  </tr>
+<tr>
+<th>error</th>
+    <td>Styles the field as error (red)</td>
+    <td>= f.text_field :name, :error =&gt; 'This is an error!'</td>
+  </tr>
+<tr>
+<th>success</th>
+    <td>Styles the field as success (green)</td>
+    <td>= f.text_field :name, :success =&gt; 'This checked out OK'</td>
+  </tr>
+<tr>
+<th>warning</th>
+    <td>Styles the field as warning (yellow)</td>
+    <td>= f.text_field :name, :warning =&gt; 'Take a look at this...'</td>
+  </tr>
+<tr>
+<th>prepend</th>
+    <td>Adds special text to the front of the input</td>
+    <td>= f.text_field :name, :prepend =&gt; '@'</td>
+  </tr>
+<tr>
+<th>append</th>
+    <td>Adds special text at the end of the input</td>
+    <td>= f.text_field :name, :append =&gt; '@'</td>
+  </tr>
+</table><h2>Internationalization/Custom Errors</h2>
+
+<p>As of <code>1.0.2</code>, <code>bootstrap_forms</code> supports I18n! More support is being added, but you can change the error header and cancel button like this:</p>
+
+<div class="highlight">
+<pre><span class="c1"># config/locales/en.yml</span>
+<span class="l-Scalar-Plain">en</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">bootstrap_forms</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">errors</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">header</span><span class="p-Indicator">:</span> <span class="s">'Your</span><span class="nv"> </span><span class="s">%{model}</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">wrong!'</span>
+    <span class="l-Scalar-Plain">buttons</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">cancel</span><span class="p-Indicator">:</span> <span class="s">'Forget</span><span class="nv"> </span><span class="s">it!'</span>
+</pre>
+</div>
+
+
+<p>Obviously you can also change to a different <code>lang.yml</code> file and use the same syntax.</p>
+
+<h2>Contributing</h2>
+
+<p>I'm pretty dam active on github. Fork and submit a pull request. Most of my pull requests are merged the same day. Make sure you:</p>
+
+<ul>
+<li>
+<strong>Squash</strong> into a single commit (unless it makes sense to have multiple commits)</li>
+<li>
+<strong>Test/Spec</strong> the changes</li>
+<li>
+<strong>Document</strong> your changes</li>
+</ul><h2>License</h2>
+
+<p>Copyright (c) 2012 Seth Vargo</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/sethvargo/bootstrap_forms/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/sethvargo/bootstrap_forms/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/sethvargo/bootstrap_forms"></a> is maintained by <a href="https://github.com/sethvargo">sethvargo</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-12012976-13");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
